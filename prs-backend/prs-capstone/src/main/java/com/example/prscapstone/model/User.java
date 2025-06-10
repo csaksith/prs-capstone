@@ -1,4 +1,6 @@
 package com.example.prscapstone.model;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 
 
@@ -8,13 +10,21 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(nullable = false, length = 20, unique = true)
 	private String username;
+	@Column(nullable = false, length = 10)
 	private String password;
+	@Column(name = "firstName", nullable = false, length = 20)
 	private String firstName;
+	@Column(name = "lastName", nullable = false, length = 20)
 	private String lastName;
+	@Column(name = "phoneNumber", nullable = false, length = 12)
 	private String phoneNumber;
+	@Column(nullable = false, length = 75)
 	private String email;
+	@Column(name = "isReviewer", nullable = false)
 	private boolean isReviewer;
+	@Column(name = "isAdmin", nullable = false)
 	private boolean isAdmin;
 	public int getId() {
 		return id;
@@ -58,12 +68,14 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	@JsonProperty("isReviewer")
 	public boolean isReviewer() {
 		return isReviewer;
 	}
 	public void setReviewer(boolean isReviewer) {
 		this.isReviewer = isReviewer;
 	}
+	@JsonProperty("isAdmin")
 	public boolean isAdmin() {
 		return isAdmin;
 	}
