@@ -1,6 +1,5 @@
 package com.example.prscapstone.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.*;
 
 
