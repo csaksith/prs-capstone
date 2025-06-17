@@ -85,6 +85,21 @@ public class RequestController {
 		return requestRepository.save(request);
 	}
 	
+	@PutMapping("/approve/{id}")
+	public Request approveRequest(@PathVariable int id) {
+		Optional<Request> optionalRequest = requestRepository.findById(id);
+		if (optionalRequest.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found.");
+		}
+		else {
+			Request request = optionalRequest.get();
+			request.setStatus("APPROVED");
+			request.setSubmittedDate(LocalDate.now());
+			return requestRepository.save(request);
+		}
+	}
+	
+	
 	@DeleteMapping("/{id}")
 	public void deleteRequest(@PathVariable int id) {
 		requestRepository.deleteById(id);
