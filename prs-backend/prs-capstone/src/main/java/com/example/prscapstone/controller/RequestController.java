@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.prscapstone.model.Request;
 import com.example.prscapstone.model.RequestDTO;
@@ -67,7 +69,22 @@ public class RequestController {
 		request.setId(id);
 		return requestRepository.save(request);
 	}
-
+	
+	@PutMapping("/submit-review/{id}")
+	public Request submitReview(@PathVariable int id) {
+		Optional<Request> optionalRequest = requestRepository.findById(id);
+		if (optionalRequest.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found.");
+		}
+		Request request = optionalRequest.get();
+		if (!"NEW".equals(request.getStatus())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request already submitted for review.");
+		}
+		request.setStatus(request.getTotal() <= 50.0 ? "APPROVED" : "REVIEW");
+		request.setSubmittedDate(LocalDate.now());
+		return requestRepository.save(request);
+	}
+	
 	@DeleteMapping("/{id}")
 	public void deleteRequest(@PathVariable int id) {
 		requestRepository.deleteById(id);
